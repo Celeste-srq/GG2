@@ -70,13 +70,58 @@ def test_3():
 	f.write('Mean value is ' + str(np.mean(y[64:192, 64:192])))
 	f.close()
 
-	# how to check whether these results are actually correct?
+def test_4():
+	# explain what this test is for
+	#plot the attenuation y values of the phantom and the reconstruction on the same graph, to observe v
+	# work out what the initial conditions should be
+	p = ct_phantom(material.name, 256, 3)
+	s = source.photon('80kVp, 1mm Al')
+	y = scan_and_reconstruct(s, material, p, 0.1, 256)
+	for i in range(p.shape[0]):
+		for j in range(p.shape[1]):
+			# multiply by 0.7
+			p[i,j] = material.coeff(material.name[int(p[i,j])])[np.where(material.mev == 0.07*0.7)]
+
+	y_phantom = p[128, :]
+	y_resonctruct = y[128, :]
+	# save some meaningful results
+	save_comparison(y_phantom, y_resonctruct, 'results', 'test_4_attenuation_comparison', label1='phantom value', label2='reconstructed value')
+	
+	# draw(y)
+	# print(y.shape)
+	# print(y)
+	
+
+
+def test_5():
+	# explain what this test is for
+	# test if the scan and reconstructed value matches the theoretical attenuated value for the material
+	# work out what the initial conditions should be
+	p = ct_phantom(material.name, 256, 1)
+	s = fake_source(source.mev, 0.1, method='ideal')
+	y = scan_and_reconstruct(s, material, p, 0.1, 256)
+
+	coeff = material.coeff('Soft Tissue')[np.where(material.mev ==0.07)]
+	
+
+
+
+	# save some meaningful results
+	save_draw(p, 'results', 'test_5_phantom')
+	f = open('results/test_5_output.txt', mode='w')
+	f.write('Mean value is ' + str(np.mean(y[64:192, 64:192])))
+	f.write('Expected value is ' + str(coeff))
+	f.close()
 
 
 # Run the various tests
-print('Test 1')
-test_1()
-#print('Test 2')
-#test_2()
-#print('Test 3')
-#test_3()
+# print('Test 1')
+# test_1()
+# print('Test 2')
+# test_2()
+# print('Test 3')
+# test_3()
+print('Test 4')
+test_4()
+# print('Test 5')
+# test_5()

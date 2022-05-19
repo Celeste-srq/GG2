@@ -1,3 +1,4 @@
+from turtle import color
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.matlib
@@ -25,6 +26,23 @@ def save_plot(data, storage_directory, file_name, xlim=None, ylim=None, title=No
 	"""save a graph"""
 	full_path = get_full_path(storage_directory, file_name)
 	plt.plot(data)
+
+	if xlim is not None:
+		plt.xlim( xlim[0], xlim[1] )
+	if ylim is not None:
+		plt.ylim( ylim[0], ylim[1] )
+	if title is not None:
+		plt.title( title )
+
+	plt.savefig(full_path)
+	plt.close()
+
+def save_comparison(data1, data2, storage_directory, file_name, label1=None, label2=None, xlim=None, ylim=None, title=None):
+	"""save a comparison graph"""
+	full_path = get_full_path(storage_directory, file_name)
+	plt.plot(data1, color = 'r', label=label1)
+	plt.plot(data2, color = 'b', label = label2)
+	plt.legend()
 
 	if xlim is not None:
 		plt.xlim( xlim[0], xlim[1] )

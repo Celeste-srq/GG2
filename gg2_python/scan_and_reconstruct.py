@@ -16,21 +16,15 @@ def scan_and_reconstruct(photons, material, phantom, scale, angles, mas=10000, a
 
 
 	# convert source (photons per (mas, cm^2)) to photons
-	photons = photons * mas * pow(scale, 2)
 
 	# create sinogram from phantom data, with received detector values
-	sinogram = ct_scan(photons, material, phantom, scale, angles, mas)
-
+	sinogram = ct_scan(photons, material, phantom, scale, angles, mas=10000)
 	# convert detector values into calibrated attenuation values
 	sinogram = ct_calibrate(photons, material, sinogram, scale)
-
 	# Ram-Lak
-	sinogram = ramp_filter(sinogram, scale, 0.0001)
-
+	sinogram = ramp_filter(sinogram, scale, alpha=0.001)
 	# Back-projection
-	phantom = back_project(sinogram)
-
+	sinogram = back_project(sinogram, skip=1)
 	# convert to Hounsfield Units
-	# phantom = (phantom - material.coeff('Water')[0])/material.coeff('Water')[0] * 1000
-
-	return phantom
+	# phantom = (sinogram - material.coeff('Water')[0])/material.coeff('Water')[0] * 1000
+	return sinogram
