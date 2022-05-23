@@ -67,7 +67,7 @@ def test_3():
 	s = fake_source(source.mev, 0.1, method='ideal')
 	y = scan_and_reconstruct(s, material, p, 0.1, 256)
 
-	coeff = material.coeff('Soft Tissue')[np.where(material.mev ==0.07)]
+	coeff = material.coeff('Soft Tissue')[np.where(material.mev == 0.07)]
 	
 	# save some meaningful results
 	save_draw(p, 'results', 'test_3_phantom')
