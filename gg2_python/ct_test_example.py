@@ -1,4 +1,3 @@
-
 # these are the imports you are likely to need
 import numpy as np
 from material import *
