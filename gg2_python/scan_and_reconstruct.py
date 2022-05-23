@@ -26,5 +26,5 @@ def scan_and_reconstruct(photons, material, phantom, scale, angles, mas=10000, a
 	# Back-projection
 	sinogram = back_project(sinogram, skip=1)
 	# convert to Hounsfield Units
-	# phantom = (sinogram - material.coeff('Water')[0])/material.coeff('Water')[0] * 1000
+	sinogram = hu(photons, material, sinogram, scale)
 	return sinogram
