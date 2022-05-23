@@ -23,13 +23,12 @@ def test_1():
 
 	# work out what the initial conditions should be
 	p = ct_phantom(material.name, 256, 3)
-	#s = source.photon('100kVp, 3mm Al')
 	# use fake source with only one frequency instead of real source
 	s = fake_source(source.mev, 0.07, method='ideal')
+	# The multiply by two here gives almost perfect reconstruction, but the reason behind which is unkown
 	y = scan_and_reconstruct(s, material, p, 0.01, 256)*2
 
 	# save some meaningful results
-	#save_draw(p, 'results', 'test_1_phantom')
 	save_draw(y, 'results', 'test_1_image', caxis=[0,max(map(max, y))])
 
 	# how to check whether these results are actually correct?

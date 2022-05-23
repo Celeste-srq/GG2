@@ -1,1 +1,1 @@
-Mean value is 0.013420607040252963
+Mean value is 0.08432416096874833Expected value is [0.20396369]
