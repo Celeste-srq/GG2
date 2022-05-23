@@ -25,7 +25,7 @@ def test_1():
 	# use fake source with only one frequency instead of real source
 	s = fake_source(source.mev, 0.07, method='ideal')
 	# The multiply by two here gives almost perfect reconstruction, but the reason behind which is unkown
-	y = scan_and_reconstruct(s, material, p, 0.01, 256)*2
+	y = scan_and_reconstruct(s, material, p, 0.01, 256)
 
 	# save some meaningful results
 	save_draw(y, 'results', 'test_1_image', caxis=[0,max(map(max, y))])
@@ -77,8 +77,8 @@ def test_3():
 	f.close()
 
 # Run the various tests
-# print('Test 1')
-# test_1()
+print('Test 1')
+test_1()
 # print('Test 2')
 # test_2()
 # print('Test 3')

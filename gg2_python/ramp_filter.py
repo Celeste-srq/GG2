@@ -37,7 +37,7 @@ def ramp_filter(sinogram, scale, alpha=0.001):
 	ram_lak = np.array(ram_lak)
 
 	# 1D Fourier transform on sinogram in r direction
-	fft_sinogram = np.zeros((angles,m))
+	fft_sinogram = np.empty((angles,m), dtype=complex)
 	for i in range(angles):
 		fft_sinogram[i] = np.fft.fft(sinogram[i], n=m)
 
