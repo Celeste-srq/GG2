@@ -2,6 +2,7 @@ import numpy as np
 import scipy
 from scipy import interpolate
 from attenuate import attenuate
+from ct_detect import ct_detect
 
 def ct_calibrate(photons, material, sinogram, scale):
 
@@ -21,16 +22,21 @@ def ct_calibrate(photons, material, sinogram, scale):
 	# due to fixed distance (depth) between transmitter and receiver.
 	I_0 = attenuate(photons, air, depth)
 
-	# Beam hardening correction
-	water = material.coeff('Water')
-	T_w = np.linspace(0,50)
-	P_w = [attenuate(photons, water, t_w) for t_w in T_w]
-	print(P_w)
-	params = np.polyfit(T_w, P_w, 3)
-	C = P_w[0]/T_w[1]
-	sinogram = C*np.polyval(params,sinogram)
-
 	# perform calibration
 	sinogram = -np.log(sinogram/np.sum(I_0))
+
+	print(sinogram[128, :])
+	print("")
+	# Beam hardening correction
+	water = material.coeff('Water')
+
+	T_w = np.linspace(1,n,n)*scale
+	P_w = -np.log(ct_detect(photons, water, T_w)/np.sum(I_0))
+	sinogram_t = np.interp(sinogram,P_w,T_w)
+	print(P_w)
+	C = sinogram[0,0]/sinogram_t[0,0]
+	sinogram = C*sinogram_t
+	print("")
+	print(sinogram[128, :])
 
 	return sinogram
