@@ -26,12 +26,9 @@ def ramp_filter(sinogram, scale, alpha=0.001):
 	# sample frequency list for fft
 	w_list = np.fft.fftfreq(m, d=scale)*2*np.pi
 	wmax = max(w_list)
+
 	# define filter
-	ram_lak = []
-	for w in w_list:
-		ram_lak.append((np.abs(w)/(2*np.pi)))
-	
-	#ram_lak = np.array([np.abs(w)/(2*np.pi) for w in w_list])
+	ram_lak = np.array([np.abs(w)/(2*np.pi) for w in w_list])
 	# replace zero at k=0 with (1/6) of the value at k=1, where k is the frequency index
 	ram_lak[0] = (1/6)*ram_lak[1]
 	ram_lak = np.array(ram_lak)
