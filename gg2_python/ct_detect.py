@@ -58,8 +58,19 @@ def ct_detect(p, coeffs, depth, mas=10000):
 	detector_photons = np.sum(detector_photons, axis=0)
 
 	# model noise
+	# Poisson distribution ~ (lambda^x * e^-lambda)/x!
+	bg_mean = 2.5    # millisievert per year
+	bg_mean /= (1.6e-19 * 1e6 * 365 * 24 * 3600)    # convert to MeV
+	n = len(detector_photons)
+	#bg_radiation = [bg_radiation for i in range(n)]
+	lambda_p = np.sum(detector_photons) / energies
+	# .poisson does not work, so use .normal to model Poisson
+	bg_radiation = np.random.normal(bg_mean, np.sqrt(bg_mean), n)
+	scatter = np.random.normal(lambda_p, np.sqrt(lambda_p), n)
+	scatter /= mas
+	detector_photons += (scatter + bg_radiation)
 
 	# minimum detection is one photon
 	detector_photons = np.clip(detector_photons, 1, None)
-
+	
 	return detector_photons
