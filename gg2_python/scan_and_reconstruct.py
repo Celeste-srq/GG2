@@ -22,9 +22,9 @@ def scan_and_reconstruct(photons, material, phantom, scale, angles, mas=10000, a
 	# convert detector values into calibrated attenuation values
 	sinogram = ct_calibrate(photons, material, sinogram, scale)
 	# Ram-Lak
-	sinogram = ramp_filter(sinogram, scale, alpha=0.001)
+	sinogram = ramp_filter(sinogram, scale, alpha=0.1)
 	# Back-projection
 	sinogram = back_project(sinogram, skip=1)
 	# convert to Hounsfield Units
-	sinogram = hu(photons, material, sinogram, scale)
+	#sinogram = hu(photons, material, sinogram, scale)
 	return sinogram
