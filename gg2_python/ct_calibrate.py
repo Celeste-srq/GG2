@@ -2,7 +2,6 @@ import numpy as np
 import scipy
 from scipy import interpolate
 from attenuate import attenuate
-from ct_detect import ct_detect
 
 def ct_calibrate(photons, material, sinogram, scale):
 
@@ -23,22 +22,6 @@ def ct_calibrate(photons, material, sinogram, scale):
 	I_0 = attenuate(photons, air, depth)
 
 	# perform calibration
-	sinogram = -np.log(sinogram/np.sum(I_0)).round(15)
-	'''
-	# Beam hardening correction
-	water = material.coeff('Water')
+	sinogram = -np.log(sinogram/np.sum(I_0))
 
-	# Measuring the recorded attenuation, for a range of different water thicknesses
-	T_w = np.linspace(0,n,n+1)*scale
-	P_w = -np.log(ct_detect(photons, water, T_w)/[np.sum(attenuate(photons, air, t_w)) for t_w in T_w])
-	
-	# Fit a function to this data
-	fit = interpolate.interp1d(P_w,T_w)
-	sinogram_t = fit(sinogram)
-
-	# Scale thickness to attenuation
-	C = P_w[1] / T_w[1]
-
-	sinogram = C * sinogram_t
-	'''
 	return sinogram
